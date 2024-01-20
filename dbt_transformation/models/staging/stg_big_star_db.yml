@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: customers
+    columns:
+    - name: customer_id
+      description: Unique key that identifies a customer
+      tests:
+        - unique
+        - not_null
+  - name: stg_orders
+    columns:
+    - name: order_id
+      description: Unique key that identifies an order
+      tests:
+        - unique
+        - not_null
+    - name: order_status
+      tests:
+        - accepted_values:
+            values:
+              - approved
+              - canceled
+              - created
+              - delivered
+              - invoiced
+              - processing
+              - shipped
+              - unavailable  
+    - name: customer_id
+      description: Foreign key that identifies a customer
+      tests:
+        - relationships:
+            to: ref('stg_customers')
+            field: customer_id
+
+  - name: dim_customers
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+      - name: city
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
